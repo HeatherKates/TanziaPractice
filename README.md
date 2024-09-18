@@ -28,17 +28,13 @@ Anywhere that you see text inside ```<>```, it must be replaced by a value speci
 
 Before you run it, look at the script to see what it will do
 
-```more 1_copy_raw_reads.sbatch```
+```more 1_copy_raw_reads.bash```
 
 To submit the job and copy the reads, run:
 
- ```sbatch 1_copy_raw_reads.sbatch```
+ ```bash 1_copy_raw_reads.bash```
 
-After you've submtited the job, check the status at any point:
-
-```squeue -u <username>```
-
-When your job is complete, check that the reads were copied successfully:
+When this has finished running, see the output using
 
  ```ls ../raw_reads```
 
