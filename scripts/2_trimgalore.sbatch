@@ -15,10 +15,10 @@ module load trim_galore
 cd ../
 
 #Run trimgalore 
-trim_galore --phred33 --paired --fastqc --cores 2 --output_dir  2a_trimgalore/ --basename MSH2KO-1 raw_reads/231-MSH2KO-1_S7_L001_R1_001.fastq.gz raw_reads/231-MSH2KO-1_S7_L001_R2_001.fastq.gz
+trim_galore --phred33 --paired --fastqc --cores 2 --output_dir  2a_trimgalore/ --basename MSH2KO-1 1_raw_reads/231-MSH2KO-1_S7_L001_R1_001.fastq.gz 1_raw_reads/231-MSH2KO-1_S7_L001_R2_001.fastq.gz
 
 #move the fastqc output to a different directory
-mv *qc* 2b_trimgalore_fastqc/
+mv 2a_trimgalore/*qc* 2b_trimgalore_fastqc/
 
 #run multiqc on fastqc files
 module load multiqc
