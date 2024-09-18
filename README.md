@@ -36,7 +36,7 @@ To submit the job and copy the reads, run:
 
 When this has finished running, see the output using
 
- ```ls ../raw_reads```
+ ```ls ../1_raw_reads```
 
 ## Step 5: (ATACseq step 1) Run trimgalore on the raw reads to detect and trim contaminating adapters from the reads
 
@@ -48,7 +48,7 @@ Note the ```fastqc``` option means that fastqc will be run before and after trim
 
 Submit the job to run trimgalore on your reads:
 
-```sbatch 2_trim_galore.sbatch```
+```sbatch 2_trimgalore.sbatch```
 
 Check the status of your job at any point
 
@@ -56,7 +56,7 @@ Check the status of your job at any point
 
 When your job is complete, check that the expected output was generated:
 
-```ls ../trimgalore```
+```ls ../2a_trimgalore```
 
 To view the fastqc output from trimgalore, use ```scp``` to transfer the file to your computer:
 
@@ -69,14 +69,14 @@ To find where each step prints output, look in the ```*sbatch``` script as descr
 
 When all steps are complete, check these output files to assess the success of alignment:
 
-```more ../flagstat/aligned.bam.flagstat.log```
+```more ../4b_flagstat/aligned.bam.flagstat.log```
 
-```more ../flagstat/aligned_filtered_sorted_duprmv.bam.flagstat.log```
+```more ../4b_flagstat/aligned_filtered_sorted_duprmv.bam.flagstat.log```
 
 Use ```more 4_samtools.sbatch``` to see how these files were created and what information they contain.
 
-* ```flagstats/aligned.bam.flagstat.log``` is alignment stats of the inital alignment output by bowtie2.
+* ```4b_flagstats/aligned.bam.flagstat.log``` is alignment stats of the inital alignment output by bowtie2.
 
-* The stats of the final sam file output by ```4_samtools.sbatch``` are recorded in ```flagstats/aligned_filtered_sorted_duprmv.bam.flagstat.log```
+* The stats of the final sam file output by ```4_samtools.sbatch``` are recorded in ```4b_flagstats/aligned_filtered_sorted_duprmv.bam.flagstat.log```
 
 Compare the results in these two files to assess the overall initial mapping of trimmed reads to the reference as well as how subsequent filtering affects reads present in the final alignment to be used for peak calling.

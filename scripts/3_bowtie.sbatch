@@ -7,11 +7,10 @@
 #SBATCH --qos=zhangw
 #SBATCH --account=zhangw
 #SBATCH -t 24:00:00
-#SBATCH --output=logs/bowtie2.out
-#SBATCH --error=logs/bowtie2.err
+#SBATCH --output=../logs/bowtie2.out
+#SBATCH --error=../logs/bowtie2.err
 
 module load bowtie2/2.4.5
-#module load samtools/0.1.16
 cd ../
 bowtie2 \
 --phred33 \
@@ -20,6 +19,6 @@ bowtie2 \
 --very-sensitive \
 --threads 2 \
 -x /blue/zhangw/hkates/chipseq/reference_data/homo_sapiens.grch38.v104 \
--1 trimgalore/MSH2R4-1_val_1.fq.gz \
--2 trimgalore/MSH2R4-1_val_2.fq.gz \
--S bowtie/231-MSH2R4-1_S10_L001.v2.sam
+-1 2a_trimgalore/MSH2KO-1_val_1.fq.gz \
+-2 2a_trimgalore/MSH2KO-1_val_2.fq.gz \
+-S 3_bowtie/MSH2KO-1.sam
