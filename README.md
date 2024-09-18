@@ -2,7 +2,7 @@
 
 This workflow is to practice running an ATACseq workflow (sequence QC, trimming, alignment, peak calling) on a single pair of read files. 
 
-## The ATACseq workflow can be replicated by running the scripts in scripts/ sequentially
+### The ATACseq workflow can be replicated by running the scripts in scripts/ sequentially
 
 ## Step 1: Log onto hipergator, go to your main /blue directory, and copy this github repository
 
@@ -15,11 +15,11 @@ This workflow is to practice running an ATACseq workflow (sequence QC, trimming,
 ```cd TanziaPractice```
 ```tree```
 
-# Step 3: Change to the directory where the scripts are so you can run the  scripts from there
+## Step 3: Change to the directory where the scripts are so you can run the  scripts from there
 
 ```cd scripts/```
 
-# Step 4: Run the first script to copy a single mate pair from /orange
+## Step 4: Run the first script to copy a single mate pair from /orange
 
 Before you run it, look at the script to see what it will do
 
@@ -37,7 +37,7 @@ When your job is complete, check that the reads were copied successfully:
 
  ```ls ../raw_reads```
 
-# Step 5: (ATACseq step 1) Run trimgalore on the raw reads to detect and trim contaminating adapters from the reads
+## Step 5: (ATACseq step 1) Run trimgalore on the raw reads to detect and trim contaminating adapters from the reads
 
 Look at	the script before running to see what it is doing:
 
@@ -61,7 +61,8 @@ To view the fastqc output from trimgalore, use ```scp``` to transfer the file to
 
 ```scp <username>@hpg2.rc.ufl.edu:/path/to/multiqc_report.html /path/to/destination```
 
-# Step 6: For ATACseq steps 2-4, follow the four steps above for the remaining scripts in scripts/ one at a time (do not start the next job before the previous is completed successfully)
+## Step 6: For ATACseq steps 2-4, follow the four steps above for the remaining scripts in scripts/ one at a time 
+### (do not start the next job before the previous is completed successfully)
 
 To find where each step prints output, look in the *sbatch script as described above (hint, using ```more```)
 
@@ -71,10 +72,10 @@ When all steps are complete, check these files to assess the success of alignmen
 
 ```more ../flagstat/aligned_filtered_sorted_duprmv.bam.flagstat.log```
 
-Use ```more 4_samtools.sbatch``` to see how these files were creaed and what information they contain.
+Use ```more 4_samtools.sbatch``` to see how these files were created and what information they contain.
 
-```flagstats/aligned.bam.flagstat.log``` is alignment stats of the inital alignment output by bowtie2.
+* ```flagstats/aligned.bam.flagstat.log``` is alignment stats of the inital alignment output by bowtie2.
 
-The stats of the final sam file output by ```4_samtools.sbatch``` are recorded in ```flagstats/aligned_filtered_sorted_duprmv.bam.flagstat.log```
+* The stats of the final sam file output by ```4_samtools.sbatch``` are recorded in ```flagstats/aligned_filtered_sorted_duprmv.bam.flagstat.log```
 
 Compare the results in these two files to assess the overall initial mapping of trimmed reads to the reference as well as how subsequent filtering affects reads present in the final alignment to be used for peak calling.
