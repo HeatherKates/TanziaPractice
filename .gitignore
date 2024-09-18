@@ -8,4 +8,4 @@
 !/*
 
 # Do not ignore files in the scripts/ directory
-!scripts/
+!scripts/*
