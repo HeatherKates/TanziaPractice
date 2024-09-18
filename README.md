@@ -3,13 +3,14 @@
 This workflow is to practice running an ATACseq workflow (sequence QC, trimming, alignment, peak calling) on a single pair of read files. 
 
 Anywhere that you see text inside ```<>```, it must be replaced by a value specific to you (e.g. your username, filepath) **without** the ```<>```
+
 ### The ATACseq workflow can be replicated by running the scripts in scripts/ sequentially
 
 ## Step 1: Log onto hipergator, go to your main /blue directory, and copy this github repository
 
 ```ssh <username>@hpg2.rc.ufl.edu```
 
-```cd /path/to/your/main/dir``` # For you this is /blue/zhangw/<username>```
+```cd </path/to/your/main/dir>``` # For you this is ```/blue/zhangw/<username>```
 
 ```git clone https://github.com/HeatherKates/TanziaPractice.git```
 
