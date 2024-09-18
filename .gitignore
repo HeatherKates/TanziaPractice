@@ -1,0 +1,11 @@
+# Ignore everything in all subdirectories
+*/*
+
+# Allow .gitkeep files in all directories
+!*/.gitkeep
+
+# Allow files in the root directory (i.e., don't ignore them)
+!/*
+
+# Do not ignore files in the scripts/ directory
+!scripts/
