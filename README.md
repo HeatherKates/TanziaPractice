@@ -28,11 +28,11 @@ Anywhere that you see text inside ```<>```, it must be replaced by a value speci
 
 Before you run it, look at the script to see what it will do
 
-```more 1_copy_raw_reads.bash```
+```more 1_copy_rawreads.bash```
 
 To submit the job and copy the reads, run:
 
- ```bash 1_copy_raw_reads.bash```
+ ```bash 1_copy_rawreads.bash```
 
 When this has finished running, see the output using
 
@@ -42,7 +42,7 @@ When this has finished running, see the output using
 
 Look at	the script before running to see what it is doing:
 
-```more 2_trim_galore.sbatch```
+```more 2_trimgalore.sbatch```
 
 Note the ```fastqc``` option means that fastqc will be run before and after trimming to generate the fastQC reports, so we do not need to do that step separately. We also included `multiqc` in the ```*sbatch``` script to summarize the results of any fastqc reports.
 
