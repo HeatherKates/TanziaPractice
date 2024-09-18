@@ -1,36 +1,67 @@
-## Reproducible workflow to run ATACseq pipeline on a single mate pair of read files
+# Reproducible workflow to run ATACseq pipeline on hipergator
 
-# The ATACseq workflow can be replicated by running the scripts in scripts/ sequentially
+This workflow is to practice running an ATACseq workflow (sequence QC, trimming, alignment, peak calling) on a single pair of read files. 
 
-# Chage to the directory where the scripts are and execute scripts from there
+## The ATACseq workflow can be replicated by running the scripts in scripts/ sequentially
+
+## Step 1: Log onto hipergator, go to your main /blue directory, and copy this github repository
+
+```ssh <username>@hpg2.rc.ufl.edu```
+```cd /path/to/your/main/dir``` # For you this is /blue/zhangw/<username>```
+```git clone https://github.com/HeatherKates/TanziaPractice.git```
+
+## Step 2: Change to the directory where the github repository is copied and see what's there
+
+```cd TanziaPractice```
+```tree```
+
+# Step 3: Change to the directory where the scripts are so you can run the  scripts from there
 
 ```cd scripts/```
 
-# Copy a single mate pair from /orange
+# Step 4: Run the first script to copy a single mate pair from /orange
 
-Look at the script before running to see what it is doing using ```more 1_copy_raw_reads.sbatch```
+Before you run it, look at the script to see what it will do
 
-To submit the job and copy the reads, run ```sbatch 1_copy_raw_reads.sbatch```
+```more 1_copy_raw_reads.sbatch```
 
-Check the status of your job using ```squeue -u <username>```
+To submit the job and copy the reads, run:
 
-When your job is complete, check that the reads were copied using ```ls ../raw_reads```
+ ```sbatch 1_copy_raw_reads.sbatch```
 
-# Run trimgalore on the raw reads to detect and trim contaminating adapters from the reads
+After you've submtited the job, check the status at any point:
 
-Look at	the script before running to see what it is doing using	```more 2_trim_galore.sbatch```
+```squeue -u <username>```
 
-To submit the job and copy the reads, run ```sbatch 2_trim_galore.sbatch```
+When your job is complete, check that the reads were copied successfully:
 
-Check the status of your job using ```squeue -u	<username>```
+ ```ls ../raw_reads```
 
-When your job is complete, check that the reads	were copied using ```ls ../trimgalore```
+# Step 5: (ATACseq step 1) Run trimgalore on the raw reads to detect and trim contaminating adapters from the reads
 
-View the fastqc output from trimgalore that will provide information about QC metrics before and after trimming:
-* use ```scp``` to transfer the multiqc_report.html file to your computer: 
-* ```scp <username>@hpg2.rc.ufl.edu:/path/to/multiqc_report.html /path/to/destination```
+Look at	the script before running to see what it is doing:
 
-# Follow the four steps above for the remaining scripts in scripts/ one at a time (do not start the next job before the previous is completed successfully)
+```more 2_trim_galore.sbatch```
+
+Note the ```fastqc``` option means that fastqc will be run before and after trimming to generate the fastQC reports, so we do not need to do that step separately
+
+Submit the job to run trimgalore on your reads:
+
+```sbatch 2_trim_galore.sbatch```
+
+Check the status of your job at any point
+
+```squeue -u <username>```
+
+When your job is complete, check that the expected output was generated:
+
+```ls ../trimgalore```
+
+To view the fastqc output from trimgalore, use ```scp``` to transfer the file to your computer:
+
+```scp <username>@hpg2.rc.ufl.edu:/path/to/multiqc_report.html /path/to/destination```
+
+# Step 6: For ATACseq steps 2-4, follow the four steps above for the remaining scripts in scripts/ one at a time (do not start the next job before the previous is completed successfully)
 
 To find where each step prints output, look in the *sbatch script as described above (hint, using ```more```)
 
@@ -42,8 +73,8 @@ When all steps are complete, check these files to assess the success of alignmen
 
 Use ```more 4_samtools.sbatch``` to see how these files were creaed and what information they contain.
 
-aligned.bam.flagstat.log is alignment stats of the inital alignment output by bowtie2.
+```flagstats/aligned.bam.flagstat.log``` is alignment stats of the inital alignment output by bowtie2.
 
-Many processing steps are executed by 4_samtools.sbatch, and the stats of the final sam file are recored in aligned_filtered_sorted_duprmv.bam.flagstat.lo
+The stats of the final sam file output by ```4_samtools.sbatch``` are recorded in ```flagstats/aligned_filtered_sorted_duprmv.bam.flagstat.log```
 
 Compare the results in these two files to assess the overall initial mapping of trimmed reads to the reference as well as how subsequent filtering affects reads present in the final alignment to be used for peak calling.
