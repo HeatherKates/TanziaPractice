@@ -7,9 +7,10 @@
 #SBATCH --qos=timgarrett-b
 #SBATCH --account=timgarrett
 #SBATCH -t 02:00:00
-#SBATCH --output=../logs/genrich.control.out
-#SBATCH --error=../logs/genrich.control.err
+#SBATCH --output=../logs/genrich.out
+#SBATCH --error=../logs/genrich.err
 
 module load genrich/0.5
 cd ../
-Genrich -t 4a_samtools/aligned_filt_noMT.sorted.bam -o 5_genrich/MSH2KO-1.vs.MLH1R4-1.narrowPeak -j -y -r -v -e MT -c ../TanziaPractice/4a_samtools/MLH1R4-1.aligned.sorted.bam
+Genrich -t 4a_samtools/aligned.sorted.bam -o 5_genrich/MSH2KO-1.narrowPeak -j -y -r -v -e MT 
+#-c This is the option for control files when they are included
