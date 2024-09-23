@@ -2,7 +2,7 @@
 #SBATCH --job-name=bigwig.%j
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=6
 #SBATCH --mem=100gb
 #SBATCH --qos=timgarrett-b
 #SBATCH --account=timgarrett
@@ -12,4 +12,12 @@
 
 module load deeptools/3.5.2
 cd ../
-bamCoverage --bam 4a_samtools/4a_samtools/aligned.coordsort.bam.bai -o 6_bigwig/aligned.coordsort.bw --binSize 10 --normalizeUsing RPKM -p=2
+
+#Step 5: Sort ethe filtered BAM by whatever else. This is for visualization
+samtools sort 4a_samtools/aligned.sorted.bam > 6_bigwig/aligned_sort_n.bam
+
+# Step 6: re-index the bam file just in case it's needed
+samtools index 6_bigwig/aligned.sort_n.bam
+
+bamCoverage --bam  6_bigwig/aligned_sort_n.bam -o 6_bigwig/aligned.sort_n.bw --binSize 10 --normalizeUsing RPKM -p=6
+
