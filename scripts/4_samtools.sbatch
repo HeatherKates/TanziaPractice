@@ -23,8 +23,11 @@ sample=$(sed -n "$((SLURM_ARRAY_TASK_ID + 1))p" MSH2_sample_list.txt)
 # Step 1: Convert the SAM file to BAM
 samtools view -h -b 3_bowtie/${sample}.sam > 4a_samtools/${sample}.bam
 
-# Step 2: Apply filters and output filtered BAM
-samtools view -h -b -F 1804 -f 2 -q 30 -@ 4 4a_samtools/${sample}.bam > 4a_samtools/${sample}.filt.bam 
+# Step 2: Apply filters, exclude non-standard chromosomes, and output filtered BAM
+# This keeps only reads mapped to chr1-22, X, Y
+samtools view -h -b -F 1804 -f 2 -q 30 -@ 4 4a_samtools/${sample}.bam | \
+    awk '$1 ~ /^@/ || $3 ~ /^chr[1-9XY][0-9]*$/' | \
+    samtools view -b - > 4a_samtools/${sample}.filt.bam 
 
 # Step 3: Sort the filtered BAM by read name (used for peak calling)
 samtools sort -n -O BAM -@ 4 4a_samtools/${sample}.filt.bam > 4a_samtools/${sample}.sorted.bam
