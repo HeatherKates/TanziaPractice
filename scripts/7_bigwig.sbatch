@@ -9,7 +9,7 @@
 #SBATCH --time=02:00:00
 #SBATCH --output=../logs/bigwig_%A_%a.out
 #SBATCH --error=../logs/bigwig_%A_%a.err
-#SBATCH --array=0-$(($(ls 4a_samtools/*.sorted.bam | wc -l) - 1)) # Automatically set the array size
+#SBATCH --array=0-5
 
 module load deeptools/3.5.2
 module load samtools/1.20

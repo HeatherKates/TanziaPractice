@@ -9,7 +9,7 @@
 #SBATCH --time=24:00:00
 #SBATCH --output=../logs/samtools_%A_%a.out
 #SBATCH --error=../logs/samtools_%A_%a.err
-#SBATCH --array=0-11  # Assuming 12 samples in the list
+#SBATCH --array=0-5  # Assuming 6 samples in the list
 
 # Load the samtools module
 module load samtools/1.20

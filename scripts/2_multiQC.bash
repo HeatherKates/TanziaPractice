@@ -1,4 +1,5 @@
 #!/bin/bash
 module load multiqc
+cd ../
 # Run multiqc to summarize the fastqc results
-multiqc 2b_trimgalore_fastqc/ -o 2b_trimgalore_fastqc/
+multiqc 2_fastQC/ -o 2_fastQC/

@@ -28,23 +28,20 @@ R1_L002=$(find $base_path -type f -name "*${sample}*_L002*R1_001.fastq.gz")
 R2_L002=$(find $base_path -type f -name "*${sample}*_L002*R2_001.fastq.gz")
 
 # Create output directories if they don't exist
-mkdir -p 2a_trimgalore/
-mkdir -p 2b_trimgalore_fastqc/
-
-# Move to the parent directory so relative filepaths are accurate
-cd ../
+mkdir -p 1_trimgalore/
+mkdir -p 2_fastQC/
 
 echo "Running trimgalore on ${R1_L001} ${R2_L001}"
 
 # Run trim_galore on both lanes for R1 and R2
-#trim_galore --phred33 --paired --fastqc --cores 2 --output_dir 2a_trimgalore/ --basename ${sample}_L001 $R1_L001 $R2_L001
+trim_galore --phred33 --paired --fastqc --cores 2 --output_dir 1_trimgalore/ --basename ${sample}_L001 $R1_L001 $R2_L001
 echo "Running trimgalore on  ${R1_L002} ${R2_L002}"
-#trim_galore --phred33 --paired --fastqc --cores 2 --output_dir 2a_trimgalore/ --basename ${sample}_L002 $R1_L002 $R2_L002
+trim_galore --phred33 --paired --fastqc --cores 2 --output_dir 1_trimgalore/ --basename ${sample}_L002 $R1_L002 $R2_L002
 
 # Run fastqc on the raw input files (R1 and R2 for both lanes)
-#fastqc -o 2b_trimgalore_fastqc/ $R1_L001 $R2_L001
-#fastqc -o 2b_trimgalore_fastqc/ $R1_L002 $R2_L002
+fastqc -o 2_fastQC/ $R1_L001 $R2_L001
+fastqc -o 2_fastQC/ $R1_L002 $R2_L002
 
 # Move fastqc outputs into a specific directory
-#mv 2a_trimgalore/*_fastqc* 2b_trimgalore_fastqc/
+mv 1_trimgalore/*_fastqc* 2_fastQC/
 
