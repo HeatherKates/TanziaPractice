@@ -1,31 +1,30 @@
 #!/bin/bash
-#SBATCH --job-name=genrich.%j
+#SBATCH --job-name=genrich_array
+#SBATCH --output=../logs/genrich_%A_%a.out
+#SBATCH --error=../logs/genrich_%A_%a.err
+#SBATCH --array=0-5  # For 6 BAM files (index starts at 0)
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=300gb
-#SBATCH --qos=timgarrett-b
+#SBATCH --cpus-per-task=1  # Adjust based on your resource needs
+#SBATCH --mem=250GB  # Adjust memory as needed
+#SBATCH --time=02:00:00  # Adjust based on expected runtime
 #SBATCH --account=timgarrett
-#SBATCH -t 04:00:00
-#SBATCH --output=../logs/genrich.out
-#SBATCH --error=../logs/genrich.err
+#SBATCH --qos=timgarrett-b
 
-module load genrich/0.5
 cd ../
+# Load necessary modules
+module load genrich
 
-# Define the path where sorted BAM files are located
+# Get all sorted BAM files in the directory
 bam_path="4a_samtools"
+bam_files=($(ls $bam_path/*.sorted.bam))
 
-# Find all the sorted BAM files
-bam_files=$(ls $bam_path/*.sorted.bam)
+# Get the BAM file for the current SLURM_ARRAY_TASK_ID
+bam_file=${bam_files[$SLURM_ARRAY_TASK_ID]}
 
-# Separate KO files (controls) and non-KO files (experiments)
-controls=$(echo "$bam_files" | grep "KO" | tr '\n' ',')
-experiments=$(echo "$bam_files" | grep -v "KO" | tr '\n' ',')
+# Extract the sample name from the BAM file name
+sample=$(basename $bam_file .sorted.bam)
 
-# Remove trailing commas
-controls=${controls%,}
-experiments=${experiments%,}
+# Run Genrich on the current BAM file
+Genrich -t "$bam_file" -o "5_genrich/${sample}.narrowPeak" -j -y -r -v -e MT
 
-# Run Genrich using the found experiment and control files
-Genrich -t $experiments -c $controls -o 5_genrich/MSH2.narrowPeak -j -y -r -v -e MT 
