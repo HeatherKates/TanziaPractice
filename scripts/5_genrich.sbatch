@@ -26,5 +26,5 @@ bam_file=${bam_files[$SLURM_ARRAY_TASK_ID]}
 sample=$(basename $bam_file .sorted.bam)
 
 # Run Genrich on the current BAM file
-Genrich -t "$bam_file" -o "5_genrich/${sample}.narrowPeak" -j -y -r -v -e MT -d 100 -D -q 0.05 
+Genrich -t "$bam_file" -o "5_genrich/${sample}.narrowPeak" -j -y -r -v -e MT -d 100 -q 0.05 
 
