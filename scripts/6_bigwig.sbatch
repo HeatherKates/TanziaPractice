@@ -24,7 +24,7 @@ bam_file=${bam_files[$SLURM_ARRAY_TASK_ID]}
 # Extract the sample name from the BAM file path (remove directory and file extension)
 sample_name=$(basename $bam_file .sorted.bam)
 
-# Sort the filtered BAM by coordinate (if necessary) for visualization
+# Sort the filtered BAM by coordinate (if necessary) for visualization and diffbind
 samtools sort -o 6_bigwig/${sample_name}_sort_n.bam $bam_file
 
 # Re-index the BAM file just in case it's needed

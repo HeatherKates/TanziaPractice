@@ -21,18 +21,20 @@ cd ../
 sample=$(sed -n "$((SLURM_ARRAY_TASK_ID + 1))p" MSH2_sample_list.txt)
 
 # Step 1: Convert the SAM file to BAM
-samtools view -h -b 3_bowtie/${sample}.sam > 4a_samtools/${sample}.bam
+#samtools view -h -b 3_bowtie/${sample}.sam > 4a_samtools/${sample}.bam
 
-# Step 2: Apply filters, exclude non-standard chromosomes, and output filtered BAM
-# This keeps only reads mapped to chr1-22, X, Y
-samtools view -h -b -F 1804 -f 2 -q 30 -@ 4 4a_samtools/${sample}.bam | \
-    awk '$1 ~ /^@/ || $3 ~ /^chr[1-9XY][0-9]*$/' | \
-    samtools view -b - > 4a_samtools/${sample}.filt.bam 
+# Step 2: Apply filters to keep only mapped, properly paired reads with high quality, and save to temp BAM
+samtools view -h -b -F 1804 -f 2 -q 30 -@ 4 4a_samtools/${sample}.bam > 4a_samtools/${sample}.filtered.bam
 
-# Step 3: Sort the filtered BAM by read name (used for peak calling)
+# Step 3: Use awk to exclude non-standard chromosomes and output a filtered BAM
+samtools view -h 4a_samtools/${sample}.filtered.bam | \
+    awk '$1 ~ /^@/ || $3 ~ /^[1-9XY][0-9]*$/' | \
+    samtools view -b - > 4a_samtools/${sample}.filt.bam
+
+# Step 4: Sort the filtered BAM by read name (used for peak calling)
 samtools sort -n -O BAM -@ 4 4a_samtools/${sample}.filt.bam > 4a_samtools/${sample}.sorted.bam
 
-# Step 4: Run flagstat on aligned BAM to get alignment statistics
+# Step 5: Run flagstat on aligned BAM to get alignment statistics
 mkdir -p 4b_flagstat
 samtools flagstat -@ 4 4a_samtools/${sample}.bam > 4b_flagstat/${sample}.bam.flagstat.log
 
