@@ -34,7 +34,7 @@ dbaObj <- dba.contrast(dbaObj, categories = DBA_CONDITION)
 
 # Perform differential binding analysis
 dbaObj <- dba.analyze(dbaObj)
-
+saveRDS(dbaObj,file="../7_diffbind/MSH2_dbaObj.RDATA")
 # Generate and inspect the report of differentially bound regions
 diffPeaks <- dba.report(dbaObj)
 head(diffPeaks)
@@ -104,4 +104,8 @@ filtered_peaks <- diffPeaksIn %>%
 # Check the filtered results
 head(filtered_peaks)
 write_peaks_to_bed(filtered_peaks, "../7_diffbind/filtered_differential_binding_results.bed")
+
+#From this point, you can view filtered peaks and per-sample reads in IGV by loading:
+#"../7_diffbind/filtered_differential_binding_results.bed"
+#"../6_bigwig/MSH2KO-1.bw","../6_bigwig/MSH2KO-2.bw","../6_bigwig/MSH2KO-3.bw","../6_bigwig/MSH2R4-1.bw","../6_bigwig/MSH2R4-2.bw","../6_bigwig/MSH2R4-3.bw")
 
