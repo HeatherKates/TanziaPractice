@@ -1,7 +1,7 @@
 library(DiffBind)
 library(edgeR)
 library(BiocParallel)
-
+library(dplyr)
 # Set up parallelization to use 4 cores
 bp_param <- MulticoreParam(workers = 6)
 
@@ -93,17 +93,33 @@ column_descriptions <- data.frame(
 # View the data frame
 print(column_descriptions)
 
+#MSH2 peaks
+
 # Set thresholds
 min_Conc_MSH2 <- 2  # Adjust this value based on data and expectations
 max_Conc_KO <- 0.2  # Adjust based on definition of "low" in KO
 
 # Filter peaks for positive fold change, low concentration in KO, and reasonably high concentration in MSH2
-filtered_peaks <- diffPeaksIn %>%
+MSH2_filtered_peaks <- diffPeaksIn %>%
   filter(Fold > 0 & Conc_KO < max_Conc_KO & Conc_MSH2 > min_Conc_MSH2)
 
 # Check the filtered results
+head(MSH2_filtered_peaks)
+write_peaks_to_bed(MSH2_filtered_peaks, "../7_diffbind/MSH2_filtered_differential_binding_results.bed")
+
+#MSH2KO peaks
+
+# Set thresholds
+min_Conc_KO <- 2  # Adjust this value based on data and expectations
+max_Conc_MSH2 <- 0.2  # Adjust based on definition of "low" in MSH2
+
+# Filter peaks for positive fold change, low concentration in KO, and reasonably high concentration in MSH2
+MSH2KO_filtered_peaks <- diffPeaksIn %>%
+  filter(Fold > 0 & Conc_MSH2 < max_Conc_MSH2 & Conc_KO > min_Conc_KO)
+
+# Check the filtered results
 head(filtered_peaks)
-write_peaks_to_bed(filtered_peaks, "../7_diffbind/filtered_differential_binding_results.bed")
+write_peaks_to_bed(MSH2KO_filtered_peaks, "../7_diffbind/MSH2KO_filtered_differential_binding_results.bed")
 
 #From this point, you can view filtered peaks and per-sample reads in IGV by loading:
 #"../7_diffbind/filtered_differential_binding_results.bed"
