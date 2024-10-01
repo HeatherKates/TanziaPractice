@@ -9,3 +9,6 @@
 
 # Do not ignore files in the scripts/ directory
 !scripts/*
+
+#rserver etc files
+scripts/rs*
