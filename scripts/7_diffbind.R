@@ -42,17 +42,31 @@ write.csv(diffPeaks, file = "../7_diffbind/differential_binding_results.csv")
 diffPeaksIn <- read.csv("../7_diffbind/differential_binding_results.csv")
 
 
-# Create a BED file by selecting the appropriate columns (assuming columns are named 'chr', 'start', 'end')
-bed <- data.frame(
-  chr = diffPeaksIn$seqnames,       # Replace with the actual column name for chromosome
-  start = diffPeaksIn$start,   # Replace with the actual column name for start position
-  end = diffPeaksIn$end,       # Replace with the actual column name for end position
-  name = diffPeaksIn$X,   # Optionally include peak ID or use `.` if no name is required
-  score = diffPeaksIn$Fold   # You can use log2 fold-change or a custom score column
-)
+# Function to write peaks data frame to a BED file
+write_peaks_to_bed <- function(peaks_df, output_file) {
+  
+  # Ensure required columns are present
+  if (!all(c("seqnames", "start", "end", "X", "Fold") %in% colnames(peaks_df))) {
+    stop("The data frame does not contain the necessary columns: 'seqnames', 'start', 'end', 'X', 'Fold'")
+  }
+  
+  # Create the BED format data frame
+  bed <- data.frame(
+    chr = peaks_df$seqnames,      # Chromosome column
+    start = peaks_df$start,       # Start position
+    end = peaks_df$end,           # End position
+    name = peaks_df$X,            # Peak ID or use `.` if no name is required
+    score = peaks_df$Fold         # Log2 fold-change as score
+  )
+  
+  # Write the BED file
+  write.table(bed, file = output_file, quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
+  
+  message("BED file written to: ", output_file)
+}
 
-# Write the BED file
-write.table(bed, file = "../7_diffbind/differential_binding_results.bed", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
+# Example usage with your dataframe 'diffPeaksIn'
+write_peaks_to_bed(diffPeaksIn, "../7_diffbind/differential_binding_results.bed")
 
 #Make a README
 # Define column names and their descriptions
@@ -78,3 +92,16 @@ column_descriptions <- data.frame(
 
 # View the data frame
 print(column_descriptions)
+
+# Set thresholds
+min_Conc_MSH2 <- 2  # Adjust this value based on data and expectations
+max_Conc_KO <- 0.2  # Adjust based on definition of "low" in KO
+
+# Filter peaks for positive fold change, low concentration in KO, and reasonably high concentration in MSH2
+filtered_peaks <- diffPeaksIn %>%
+  filter(Fold > 0 & Conc_KO < max_Conc_KO & Conc_MSH2 > min_Conc_MSH2)
+
+# Check the filtered results
+head(filtered_peaks)
+write_peaks_to_bed(filtered_peaks, "../7_diffbind/filtered_differential_binding_results.bed")
+
